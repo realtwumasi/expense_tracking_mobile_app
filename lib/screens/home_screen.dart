@@ -6,8 +6,16 @@ import 'add_edit_expense_screen.dart';
 import 'category_summary_screen.dart';
 import 'daily_expenses_screen.dart'; // Ensure this matches filename
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedYear = DateTime.now().year;
+  int? _selectedMonth = DateTime.now().month; // Default to current month based on user request "detect month"
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +41,58 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Yearly Overview',
-                  style: Theme.of(context).textTheme.titleLarge,
+                // Filter Row
+                Row(
+                  children: [
+                    Text(
+                      'Overview',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const Spacer(),
+                    // Year Dropdown
+                    DropdownButton<int>(
+                      value: _selectedYear,
+                      underline: Container(), // Remove underline
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                      onChanged: (int? value) {
+                        if (value != null) {
+                          setState(() => _selectedYear = value);
+                        }
+                      },
+                      items: List.generate(5, (index) {
+                        // Last 5 years
+                        final year = DateTime.now().year - index;
+                        return DropdownMenuItem(value: year, child: Text(year.toString()));
+                      }),
+                    ),
+                    const SizedBox(width: 8),
+                    // Month Dropdown
+                    DropdownButton<int?>(
+                      value: _selectedMonth,
+                       underline: Container(),
+                      onChanged: (int? value) {
+                        setState(() => _selectedMonth = value);
+                      },
+                      items: [
+                        const DropdownMenuItem(value: null, child: Text('All Year')),
+                        ...List.generate(12, (index) {
+                          final monthIndex = index + 1;
+                          // Simple month names
+                          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                          return DropdownMenuItem(
+                            value: monthIndex, 
+                            child: Text(months[index]),
+                          );
+                        }),
+                      ],
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 ContributionGrid(
                   dailySpending: provider.dailySpending,
+                  year: _selectedYear,
+                  month: _selectedMonth,
                   onDateTap: (date) {
                     Navigator.push(
                       context,

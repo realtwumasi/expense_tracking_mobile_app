@@ -13,6 +13,7 @@ void main() {
           body: ContributionGrid(
             dailySpending: dailySpending,
             onDateTap: (_) {},
+            year: 2026,
           ),
         ),
       ),
@@ -33,9 +34,7 @@ void main() {
     // Item 7 (The 8th item). If 7 items per column, this should be in the SECOND column (Right of box0).
     final box7 = tester.getRect(gestureDetectors.at(7));
 
-    print('Box0: $box0');
-    print('Box1: $box1');
-    print('Box7: $box7');
+
 
     // Box1 should be below Box0
     expect(box1.top, greaterThan(box0.top), reason: 'Item 1 should be below Item 0');
