@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
 import '../database/database_helper.dart';
+import 'package:csv/csv.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
+import 'package:intl/intl.dart';
 
 class ExpenseProvider with ChangeNotifier {
   List<Expense> _expenses = [];
@@ -69,5 +74,35 @@ class ExpenseProvider with ChangeNotifier {
   double getTotalSpendingForDate(DateTime date) {
      final dateKey = DateTime(date.year, date.month, date.day);
      return _dailySpending[dateKey] ?? 0.0;
+  }
+  Future<void> exportExpensesToCsv() async {
+    List<List<dynamic>> rows = [];
+    // Header
+    rows.add(['Date', 'Time', 'Amount', 'Category', 'Description']);
+
+    for (var expense in _expenses) {
+      final category = _categories.firstWhere(
+        (c) => c.id == expense.categoryId,
+        orElse: () => _categories.first,
+      );
+      
+      rows.add([
+        DateFormat('yyyy-MM-dd').format(expense.date),
+        DateFormat('HH:mm').format(expense.date),
+        expense.amount,
+        category.name,
+        expense.description ?? '',
+      ]);
+    }
+
+    String csvData = const ListToCsvConverter().convert(rows);
+    
+    final directory = await getTemporaryDirectory();
+    final path = '${directory.path}/expenses_backup_${DateTime.now().millisecondsSinceEpoch}.csv';
+    final file = File(path);
+    await file.writeAsString(csvData);
+
+    // ignore: deprecated_member_use
+    await Share.shareXFiles([XFile(path)], text: 'My Expense Backup');
   }
 }

@@ -4,6 +4,7 @@ import '../providers/expense_provider.dart';
 import '../widgets/contribution_grid.dart';
 import 'add_edit_expense_screen.dart';
 import 'category_summary_screen.dart';
+import 'settings_screen.dart';
 import 'daily_expenses_screen.dart'; // Ensure this matches filename
 
 class HomeScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedYear = DateTime.now().year;
-  int? _selectedMonth = DateTime.now().month; // Default to current month based on user request "detect month"
+  int? _selectedMonth; // Default to null ("All Year") as requested
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,15 @@ class _HomeScreenState extends State<HomeScreen> {
                Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const CategorySummaryScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+               Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
               );
             },
           ),

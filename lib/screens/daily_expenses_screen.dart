@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../providers/expense_provider.dart';
+import '../providers/settings_provider.dart';
 import '../widgets/expense_list_tile.dart';
 import 'add_edit_expense_screen.dart';
 
@@ -46,7 +47,7 @@ class DailyExpensesScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Total Spent', style: Theme.of(context).textTheme.titleMedium),
-                    Text('\$${total.toStringAsFixed(2)}', 
+                    Text('${Provider.of<SettingsProvider>(context).currencySymbol}${total.toStringAsFixed(2)}', 
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.bold

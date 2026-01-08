@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
+import 'package:provider/provider.dart';
+import '../providers/settings_provider.dart';
 
 class ExpenseListTile extends StatelessWidget {
   final Expense expense;
@@ -31,7 +33,7 @@ class ExpenseListTile extends StatelessWidget {
             ? Text(expense.description!)
             : Text(DateFormat.jm().format(expense.date)),
         trailing: Text(
-          '\$${expense.amount.toStringAsFixed(2)}',
+          '${Provider.of<SettingsProvider>(context).currencySymbol}${expense.amount.toStringAsFixed(2)}',
           style: Theme.of(context).textTheme.titleMedium,
         ),
         onTap: onTap,
