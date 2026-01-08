@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/expense.dart';
-import '../models/category.dart';
+import '../models/expense.dart';
 import '../providers/expense_provider.dart';
 
 class AddEditExpenseScreen extends StatefulWidget {

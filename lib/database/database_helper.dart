@@ -71,7 +71,7 @@ CREATE TABLE expenses (
         iconCodePoint: Icons.fastfood.codePoint,
         iconFontFamily: Icons.fastfood.fontFamily,
         iconFontPackage: Icons.fastfood.fontPackage,
-        colorValue: Colors.orange.value,
+        colorValue: Colors.orange.toARGB32(),
       ),
       Category(
         id: 'transport',
@@ -79,7 +79,7 @@ CREATE TABLE expenses (
         iconCodePoint: Icons.directions_bus.codePoint,
         iconFontFamily: Icons.directions_bus.fontFamily,
         iconFontPackage: Icons.directions_bus.fontPackage,
-        colorValue: Colors.blue.value,
+        colorValue: Colors.blue.toARGB32(),
       ),
       Category(
         id: 'internet',
@@ -87,7 +87,7 @@ CREATE TABLE expenses (
         iconCodePoint: Icons.wifi.codePoint,
         iconFontFamily: Icons.wifi.fontFamily,
         iconFontPackage: Icons.wifi.fontPackage,
-        colorValue: Colors.indigo.value,
+        colorValue: Colors.indigo.toARGB32(),
       ),
       Category(
         id: 'utilities',
@@ -95,7 +95,7 @@ CREATE TABLE expenses (
         iconCodePoint: Icons.lightbulb.codePoint,
         iconFontFamily: Icons.lightbulb.fontFamily,
         iconFontPackage: Icons.lightbulb.fontPackage,
-        colorValue: Colors.yellow[700]!.value,
+        colorValue: Colors.yellow[700]!.toARGB32(),
       ),
       Category(
         id: 'entertainment',
@@ -103,7 +103,7 @@ CREATE TABLE expenses (
         iconCodePoint: Icons.movie.codePoint,
         iconFontFamily: Icons.movie.fontFamily,
         iconFontPackage: Icons.movie.fontPackage,
-        colorValue: Colors.pink.value,
+        colorValue: Colors.pink.toARGB32(),
       ),
       Category(
         id: 'health',
@@ -111,7 +111,7 @@ CREATE TABLE expenses (
         iconCodePoint: Icons.local_hospital.codePoint,
         iconFontFamily: Icons.local_hospital.fontFamily,
         iconFontPackage: Icons.local_hospital.fontPackage,
-        colorValue: Colors.red.value,
+        colorValue: Colors.red.toARGB32(),
       ),
       Category(
         id: 'other',
@@ -119,7 +119,7 @@ CREATE TABLE expenses (
         iconCodePoint: Icons.category.codePoint,
         iconFontFamily: Icons.category.fontFamily,
         iconFontPackage: Icons.category.fontPackage,
-        colorValue: Colors.grey.value,
+        colorValue: Colors.grey.toARGB32(),
       ),
     ];
 
