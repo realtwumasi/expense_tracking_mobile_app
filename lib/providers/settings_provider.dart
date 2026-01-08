@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsProvider with ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.light; // Default to Light
   String _currencySymbol = '\$'; // Default to Dollar
 
   ThemeMode get themeMode => _themeMode;
@@ -14,7 +14,7 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    final themeIndex = prefs.getInt('theme_mode') ?? 0; // 0: System, 1: Light, 2: Dark
+    final themeIndex = prefs.getInt('theme_mode') ?? 1; // Default to 1 (Light)
     _currencySymbol = prefs.getString('currency_symbol') ?? '\$';
 
     switch (themeIndex) {
