@@ -5,7 +5,10 @@ import '../widgets/contribution_grid.dart';
 import 'add_edit_expense_screen.dart';
 import 'category_summary_screen.dart';
 import 'settings_screen.dart';
-import 'daily_expenses_screen.dart'; // Ensure this matches filename
+import 'daily_expenses_screen.dart';
+import '../widgets/expense_list_tile.dart';
+import '../models/expense.dart';
+import '../providers/settings_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedYear = DateTime.now().year;
-  int? _selectedMonth; // Default to null ("All Year") as requested
+  int? _selectedMonth; // Default to null ("All Year")
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
+
+                // Summary Card
+                _buildSummaryCard(provider, context),
+                const SizedBox(height: 16),
+
                 ContributionGrid(
                   dailySpending: provider.dailySpending,
                   year: _selectedYear,
@@ -113,7 +121,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                // Could add recent expenses here
+                
+                // Recent Transactions
+                Text(
+                  'Recent Transactions',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                _buildRecentTransactions(provider),
               ],
             ),
           );
@@ -128,6 +143,89 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget _buildSummaryCard(ExpenseProvider provider, BuildContext context) {
+    double total = 0;
+    // Calculate total based on filters
+    for (var expense in provider.expenses) {
+      if (expense.date.year == _selectedYear) {
+        if (_selectedMonth == null || expense.date.month == _selectedMonth) {
+          total += expense.amount;
+        }
+      }
+    }
+    
+    final currency = Provider.of<SettingsProvider>(context).currencySymbol;
+
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _selectedMonth == null ? 'Total Spent ($_selectedYear)' : 'Total Spent',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$currency${total.toStringAsFixed(2)}',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            Icon(Icons.account_balance_wallet, size: 40, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRecentTransactions(ExpenseProvider provider) {
+    if (provider.expenses.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Text('No expenses recorded yet.'),
+      );
+    }
+
+    // Sort valid copy by date desc
+    final recent = List<Expense>.from(provider.expenses)
+      ..sort((a, b) => b.date.compareTo(a.date));
+    
+    // Take top 5
+    final top5 = recent.take(5).toList();
+
+    return Column(
+      children: top5.map<Widget>((expense) {
+        final category = provider.categories.firstWhere(
+          (c) => c.id == expense.categoryId,
+          orElse: () => provider.categories.first,
+        );
+
+        return ExpenseListTile(
+          expense: expense,
+          category: category,
+          onTap: () {
+             Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => AddEditExpenseScreen(expense: expense),
+              ),
+            );
+          },
+        );
+      }).toList(),
     );
   }
 }
