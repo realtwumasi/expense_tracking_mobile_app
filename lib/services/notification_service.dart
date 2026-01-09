@@ -24,7 +24,7 @@ class NotificationService {
       debugPrint('Timezone initialized: $timeZoneName');
 
       const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+          AndroidInitializationSettings('@drawable/ic_notification');
 
       const DarwinInitializationSettings initializationSettingsDarwin =
           DarwinInitializationSettings(
@@ -116,7 +116,7 @@ class NotificationService {
             channelDescription: 'Reminds you to log daily expenses',
             importance: Importance.max,
             priority: Priority.high,
-            icon: '@mipmap/ic_launcher',
+            icon: '@drawable/ic_notification',
           ),
           iOS: DarwinNotificationDetails(),
         ),
