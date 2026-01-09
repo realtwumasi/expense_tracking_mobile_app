@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../providers/expense_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/expense_list_tile.dart';
+import '../widgets/empty_state.dart';
 import 'add_edit_expense_screen.dart';
 
 class DailyExpensesScreen extends StatelessWidget {
@@ -24,15 +25,10 @@ class DailyExpensesScreen extends StatelessWidget {
           expenses.sort((a,b) => b.timestamp.compareTo(a.timestamp));
 
           if (expenses.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.receipt_long_outlined, size: 64, color: Colors.grey),
-                  const SizedBox(height: 16),
-                  Text('No expenses for this day.', style: Theme.of(context).textTheme.bodyLarge),
-                ],
-              ),
+            return const EmptyStateWidget(
+              title: 'No expenses for this day',
+              subtitle: 'Enjoy your savings! 💰',
+              icon: Icons.calendar_today_outlined,
             );
           }
 

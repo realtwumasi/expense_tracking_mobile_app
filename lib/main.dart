@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'services/notification_service.dart';
 import 'providers/settings_provider.dart';
 import 'providers/expense_provider.dart';
-import 'providers/expense_provider.dart';
 import 'screens/splash_screen.dart';
 
 Future<void> main() async {

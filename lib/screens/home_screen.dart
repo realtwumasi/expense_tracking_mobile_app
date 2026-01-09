@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:animations/animations.dart';
 import '../providers/expense_provider.dart';
 import '../widgets/contribution_grid.dart';
+import '../widgets/empty_state.dart';
 import 'add_edit_expense_screen.dart';
 import 'category_summary_screen.dart';
 import 'settings_screen.dart';
@@ -147,14 +149,23 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AddEditExpenseScreen()),
+      floatingActionButton: OpenContainer(
+        openBuilder: (context, _) => const AddEditExpenseScreen(),
+        closedElevation: 6.0,
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)), // FAB standard radius
+        ),
+        closedColor: Theme.of(context).colorScheme.primaryContainer,
+        openColor: Theme.of(context).colorScheme.surface,
+        transitionType: ContainerTransitionType.fadeThrough,
+        transitionDuration: const Duration(milliseconds: 500),
+        closedBuilder: (context, openContainer) {
+          return FloatingActionButton(
+            elevation: 0,
+            onPressed: openContainer,
+            child: const Icon(Icons.add),
           );
         },
-        child: const Icon(Icons.add),
       ),
     );
   }
@@ -256,9 +267,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildRecentTransactions(ExpenseProvider provider) {
     if (provider.expenses.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text('No expenses recorded yet.'),
+      return const EmptyStateWidget(
+        title: 'No expenses yet',
+        subtitle: 'Tap the + button to track your first expense!',
+        icon: Icons.receipt_long_outlined,
       );
     }
 
