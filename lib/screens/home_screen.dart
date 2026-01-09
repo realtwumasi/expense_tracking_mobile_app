@@ -57,9 +57,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Filter Row
                 Row(
                   children: [
-                    Text(
-                      'Overview',
-                      style: Theme.of(context).textTheme.titleLarge,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello, ${Provider.of<SettingsProvider>(context).userName ?? 'User'}! 👋',
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        Text(
+                          'Here is your financial overview.',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Colors.grey[600],
+                              ),
+                        ),
+                      ],
                     ),
                     const Spacer(),
                     // Year Dropdown

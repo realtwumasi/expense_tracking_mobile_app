@@ -21,6 +21,28 @@ class SettingsScreen extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(16.0),
             children: [
+              _buildSectionHeader(context, 'Profile'),
+              _buildSettingsCard(
+                context,
+                children: [
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.teal.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.person, color: Colors.teal),
+                    ),
+                    title: const Text('Your Name'),
+                    subtitle: Text(settings.userName ?? 'Not Set'),
+                    trailing: const Icon(Icons.edit, size: 20),
+                    onTap: () => _editName(context, settings),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
               _buildSectionHeader(context, 'Appearance'),
               _buildSettingsCard(
                 context,
@@ -149,6 +171,36 @@ class SettingsScreen extends StatelessWidget {
       ),
       child: Column(
         children: children,
+      ),
+    );
+  }
+
+  void _editName(BuildContext context, SettingsProvider settings) {
+    final controller = TextEditingController(text: settings.userName);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Name'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(labelText: 'Name'),
+          textCapitalization: TextCapitalization.words,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (controller.text.trim().isNotEmpty) {
+                settings.setUserName(controller.text.trim());
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Save'),
+          ),
+        ],
       ),
     );
   }

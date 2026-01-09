@@ -7,11 +7,13 @@ class SettingsProvider with ChangeNotifier {
   TimeOfDay _reminderTime = const TimeOfDay(hour: 20, minute: 0); // Default 8 PM
   ThemeMode _themeMode = ThemeMode.light;
   String _currencySymbol = '\$';
+  String? _userName;
 
   ThemeMode get themeMode => _themeMode;
   String get currencySymbol => _currencySymbol;
   bool get isReminderEnabled => _isReminderEnabled;
   TimeOfDay get reminderTime => _reminderTime;
+  String? get userName => _userName;
 
   SettingsProvider() {
     _loadSettings();
@@ -22,6 +24,7 @@ class SettingsProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final themeIndex = prefs.getInt('theme_mode') ?? 1; // Default to 1 (Light)
       _currencySymbol = prefs.getString('currency_symbol') ?? '\$';
+      _userName = prefs.getString('user_name');
       
       _isReminderEnabled = prefs.getBool('reminder_enabled') ?? false;
       final timeString = prefs.getString('reminder_time');
@@ -98,5 +101,12 @@ class SettingsProvider with ChangeNotifier {
     if (_isReminderEnabled) {
       await NotificationService().scheduleDailyNotification(time);
     }
+  }
+
+  Future<void> setUserName(String name) async {
+    _userName = name;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_name', name);
   }
 }
