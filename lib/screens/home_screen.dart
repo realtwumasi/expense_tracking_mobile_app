@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expense Tracker'),
+        //backgroundColor:Colors.transparent,
         actions: [
           IconButton(
             icon: const Icon(Icons.pie_chart),
@@ -158,35 +159,85 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     
     final currency = Provider.of<SettingsProvider>(context).currencySymbol;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Column(
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            colorScheme.primary,
+            colorScheme.tertiary,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withValues(alpha: 0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Decorative Background Icon
+          Positioned(
+            right: -20,
+            top: -20,
+            child: Icon(
+              Icons.account_balance_wallet,
+              size: 150,
+              color: colorScheme.onPrimary.withValues(alpha: 0.1),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.onPrimary.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.attach_money, color: colorScheme.onPrimary, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      _selectedMonth == null ? 'Total Spent ($_selectedYear)' : 'Total Spent',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onPrimary.withValues(alpha: 0.9),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
                 Text(
-                  _selectedMonth == null ? 'Total Spent ($_selectedYear)' : 'Total Spent',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
+                  '$currency${total.toStringAsFixed(2)}',
+                  style: theme.textTheme.displaySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onPrimary,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '$currency${total.toStringAsFixed(2)}',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
+                  'Overview',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onPrimary.withValues(alpha: 0.7),
                   ),
                 ),
               ],
             ),
-            const Spacer(),
-            Icon(Icons.account_balance_wallet, size: 40, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

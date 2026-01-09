@@ -39,12 +39,18 @@ class Category {
     );
   }
 
+  static const Map<int, IconData> _supportedIcons = {
+    0xe25a: Icons.fastfood,
+    0xe1d5: Icons.directions_bus,
+    0xe6e0: Icons.wifi,
+    0xe3ab: Icons.lightbulb,
+    0xe404: Icons.movie,
+    0xe37f: Icons.local_hospital,
+    0xe148: Icons.category,
+  };
+
   IconData get iconData {
-    return IconData(
-      iconCodePoint,
-      fontFamily: iconFontFamily,
-      fontPackage: iconFontPackage,
-    );
+    return _supportedIcons[iconCodePoint] ?? Icons.category;
   }
 
   Color get color => Color(colorValue);

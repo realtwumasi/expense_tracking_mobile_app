@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/expense_provider.dart';
+import 'services/notification_service.dart';
 import 'providers/settings_provider.dart';
+import 'providers/expense_provider.dart';
 import 'screens/home_screen.dart';
 
-void main() {
+Future<void> main() async { // Changed main to async
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init(); // Added NotificationService initialization
   runApp(const MyApp());
 }
 
