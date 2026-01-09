@@ -133,7 +133,7 @@ class _CategorySummaryScreenState extends State<CategorySummaryScreen> {
           final sortedKeys = summary.keys.toList()
             ..sort((a, b) => summary[b]!.compareTo(summary[a]!));
 
-          final currency = Provider.of<SettingsProvider>(context).currencySymbol;
+          final currency = Provider.of<SettingsProvider>(context, listen: false).currencySymbol;
 
           return Column(
             children: [

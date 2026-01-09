@@ -33,6 +33,7 @@ class DailyExpensesScreen extends StatelessWidget {
           }
 
           final total = expenses.fold(0.0, (sum, item) => sum + item.amount);
+          final currency = Provider.of<SettingsProvider>(context, listen: false).currencySymbol;
 
           return Column(
             children: [
@@ -43,7 +44,7 @@ class DailyExpensesScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Total Spent', style: Theme.of(context).textTheme.titleMedium),
-                    Text('${Provider.of<SettingsProvider>(context).currencySymbol}${total.toStringAsFixed(2)}', 
+                    Text('$currency${total.toStringAsFixed(2)}', 
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.bold
@@ -65,7 +66,7 @@ class DailyExpensesScreen extends StatelessWidget {
                     return ExpenseListTile(
                       expense: expense,
                       category: category,
-                      currencySymbol: Provider.of<SettingsProvider>(context, listen: false).currencySymbol,
+                      currencySymbol: currency,
                       onTap: () {
                         Navigator.push(
                           context,

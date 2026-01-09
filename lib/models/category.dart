@@ -39,14 +39,15 @@ class Category {
     );
   }
 
-  static const Map<int, IconData> _supportedIcons = {
-    0xe25a: Icons.fastfood,
-    0xe1d5: Icons.directions_bus,
-    0xe6e7: Icons.wifi,
-    0xe37b: Icons.lightbulb,
-    0xe40d: Icons.movie,
-    0xe396: Icons.local_hospital,
-    0xe148: Icons.category,
+  static Map<int, IconData> get _supportedIcons => {
+    Icons.fastfood.codePoint: Icons.fastfood,
+    Icons.directions_bus.codePoint: Icons.directions_bus,
+    Icons.shopping_cart.codePoint: Icons.shopping_cart, // Grocery
+    Icons.wifi.codePoint: Icons.wifi,
+    Icons.lightbulb.codePoint: Icons.lightbulb,
+    Icons.movie.codePoint: Icons.movie,
+    Icons.local_hospital.codePoint: Icons.local_hospital,
+    Icons.category.codePoint: Icons.category,
   };
 
   IconData get iconData {

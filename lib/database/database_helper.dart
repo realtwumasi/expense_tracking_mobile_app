@@ -22,9 +22,24 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2, // Bumped for Grocery category
       onCreate: _createDB,
+      onUpgrade: _upgradeDB,
     );
+  }
+
+  Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Add Grocery category for existing users
+      await db.insert('categories', Category(
+        id: 'grocery',
+        name: 'Grocery',
+        iconCodePoint: Icons.shopping_cart.codePoint,
+        iconFontFamily: Icons.shopping_cart.fontFamily,
+        iconFontPackage: Icons.shopping_cart.fontPackage,
+        colorValue: Colors.green.toARGB32(),
+      ).toMap());
+    }
   }
 
   Future<void> _createDB(Database db, int version) async {
@@ -85,6 +100,14 @@ CREATE TABLE expenses (
         iconFontFamily: Icons.directions_bus.fontFamily,
         iconFontPackage: Icons.directions_bus.fontPackage,
         colorValue: Colors.blue.toARGB32(),
+      ),
+      Category(
+        id: 'grocery',
+        name: 'Grocery',
+        iconCodePoint: Icons.shopping_cart.codePoint,
+        iconFontFamily: Icons.shopping_cart.fontFamily,
+        iconFontPackage: Icons.shopping_cart.fontPackage,
+        colorValue: Colors.green.toARGB32(),
       ),
       Category(
         id: 'internet',
