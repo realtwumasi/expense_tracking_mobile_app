@@ -14,6 +14,7 @@ void main() {
             dailySpending: dailySpending,
             onDateTap: (_) {},
             year: 2026,
+            currencySymbol: '\$',
           ),
         ),
       ),

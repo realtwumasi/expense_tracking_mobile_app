@@ -65,6 +65,7 @@ class DailyExpensesScreen extends StatelessWidget {
                     return ExpenseListTile(
                       expense: expense,
                       category: category,
+                      currencySymbol: Provider.of<SettingsProvider>(context, listen: false).currencySymbol,
                       onTap: () {
                         Navigator.push(
                           context,

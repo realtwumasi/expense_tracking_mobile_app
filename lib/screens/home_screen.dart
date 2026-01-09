@@ -114,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   dailySpending: provider.dailySpending,
                   year: _selectedYear,
                   month: _selectedMonth,
+                  currencySymbol: Provider.of<SettingsProvider>(context, listen: false).currencySymbol,
                   onDateTap: (date) {
                     Navigator.push(
                       context,
@@ -277,6 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return ExpenseListTile(
           expense: expense,
           category: category,
+          currencySymbol: Provider.of<SettingsProvider>(context, listen: false).currencySymbol,
           onTap: () {
              Navigator.push(
               context,
