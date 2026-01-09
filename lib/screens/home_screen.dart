@@ -7,7 +7,6 @@ import 'category_summary_screen.dart';
 import 'settings_screen.dart';
 import 'daily_expenses_screen.dart';
 import '../widgets/expense_list_tile.dart';
-import '../models/expense.dart';
 import '../providers/settings_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -250,12 +249,8 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    // Sort valid copy by date desc
-    final recent = List<Expense>.from(provider.expenses)
-      ..sort((a, b) => b.date.compareTo(a.date));
-    
-    // Take top 5
-    final top5 = recent.take(5).toList();
+    // Expenses are already sorted by Date DESC, Timestamp DESC from DB
+    final top5 = provider.expenses.take(5).toList();
 
     return Column(
       children: top5.map<Widget>((expense) {

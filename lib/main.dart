@@ -5,16 +5,20 @@ import 'providers/settings_provider.dart';
 import 'providers/expense_provider.dart';
 import 'screens/home_screen.dart';
 
-Future<void> main() async { // Changed main to async
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService().init(); // Added NotificationService initialization
+  try {
+    await NotificationService().init();
+  } catch (e) {
+    debugPrint('Failed to initialize notifications: $e');
+  }
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

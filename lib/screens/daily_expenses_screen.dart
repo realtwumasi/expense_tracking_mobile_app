@@ -91,7 +91,7 @@ class DailyExpensesScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => AddEditExpenseScreen(
+              builder: (_) => const AddEditExpenseScreen(
                 expense: null,
                 // We'd need to modify AddEditExpenseScreen constructor or internal logic 
                 // to accept a default date, but currently it defaults to Now.

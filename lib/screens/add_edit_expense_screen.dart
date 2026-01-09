@@ -125,7 +125,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                   labelText: 'Amount',
                   prefixText: '${Provider.of<SettingsProvider>(context).currencySymbol} ',
                 ),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Enter amount';
                   if (double.tryParse(value) == null) return 'Enter valid number';

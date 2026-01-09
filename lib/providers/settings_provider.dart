@@ -18,28 +18,33 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> _loadSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    final themeIndex = prefs.getInt('theme_mode') ?? 1; // Default to 1 (Light)
-    _currencySymbol = prefs.getString('currency_symbol') ?? '\$';
-    
-    _isReminderEnabled = prefs.getBool('reminder_enabled') ?? false;
-    final timeString = prefs.getString('reminder_time');
-    if (timeString != null) {
-      final parts = timeString.split(':');
-      if (parts.length == 2) {
-        _reminderTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final themeIndex = prefs.getInt('theme_mode') ?? 1; // Default to 1 (Light)
+      _currencySymbol = prefs.getString('currency_symbol') ?? '\$';
+      
+      _isReminderEnabled = prefs.getBool('reminder_enabled') ?? false;
+      final timeString = prefs.getString('reminder_time');
+      if (timeString != null) {
+        final parts = timeString.split(':');
+        if (parts.length == 2) {
+          _reminderTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+        }
       }
-    }
 
-    switch (themeIndex) {
-      case 1:
-        _themeMode = ThemeMode.light;
-        break;
-      case 2:
-        _themeMode = ThemeMode.dark;
-        break;
-      default:
-        _themeMode = ThemeMode.system;
+      switch (themeIndex) {
+        case 1:
+          _themeMode = ThemeMode.light;
+          break;
+        case 2:
+          _themeMode = ThemeMode.dark;
+          break;
+        default:
+          _themeMode = ThemeMode.system;
+      }
+    } catch (e) {
+      debugPrint('Error loading settings: $e');
+      // Fallback to defaults is automatic since fields have initial values
     }
     notifyListeners();
   }
@@ -69,7 +74,15 @@ class SettingsProvider with ChangeNotifier {
     
     // Schedule or Cancel
     if (isEnabled) {
-      await NotificationService().scheduleDailyNotification(_reminderTime);
+      final hasPermission = await NotificationService().requestPermissions();
+      if (hasPermission) {
+        await NotificationService().scheduleDailyNotification(_reminderTime);
+      } else {
+        // Revert toggle if permission denied
+        _isReminderEnabled = false;
+        await prefs.setBool('reminder_enabled', false);
+        notifyListeners(); // UI will uncheck the switch
+      }
     } else {
       await NotificationService().cancelAll();
     }

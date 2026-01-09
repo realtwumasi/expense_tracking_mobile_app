@@ -12,6 +12,7 @@ class ExpenseProvider with ChangeNotifier {
   List<Expense> _expenses = [];
   List<Category> _categories = [];
   Map<DateTime, double> _dailySpending = {};
+  Map<DateTime, List<Expense>> _expensesByDate = {};
 
   List<Expense> get expenses => _expenses;
   List<Category> get categories => _categories;
@@ -29,23 +30,30 @@ class ExpenseProvider with ChangeNotifier {
 
   Future<void> loadExpenses() async {
     _expenses = await DatabaseHelper.instance.readAllExpenses();
-    _calculateDailySpending();
+    _calculateSummaries();
     notifyListeners();
   }
 
-  void _calculateDailySpending() {
+  void _calculateSummaries() {
     _dailySpending = {};
+    _expensesByDate = {};
+    
     for (var expense in _expenses) {
       // Normalize date to YYYY-MM-DD (midnight)
       final dateKey = DateTime(expense.date.year, expense.date.month, expense.date.day);
-      if (_dailySpending.containsKey(dateKey)) {
-        _dailySpending[dateKey] = _dailySpending[dateKey]! + expense.amount;
-      } else {
-        _dailySpending[dateKey] = expense.amount;
+      
+      // Update Spending
+      _dailySpending[dateKey] = (_dailySpending[dateKey] ?? 0.0) + expense.amount;
+
+      // Update List Cache
+      if (!_expensesByDate.containsKey(dateKey)) {
+        _expensesByDate[dateKey] = [];
       }
+      _expensesByDate[dateKey]!.add(expense);
     }
   }
 
+  // CRUD methods (unchanged...)
   Future<void> addExpense(Expense expense) async {
     await DatabaseHelper.instance.createExpense(expense);
     _expenses.add(expense); // Optimistic update or reload?
@@ -64,11 +72,8 @@ class ExpenseProvider with ChangeNotifier {
   }
 
   List<Expense> getExpensesByDate(DateTime date) {
-    return _expenses.where((e) => 
-      e.date.year == date.year && 
-      e.date.month == date.month && 
-      e.date.day == date.day
-    ).toList();
+    final dateKey = DateTime(date.year, date.month, date.day);
+    return _expensesByDate[dateKey] ?? [];
   }
 
   double getTotalSpendingForDate(DateTime date) {

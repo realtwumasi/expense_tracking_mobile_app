@@ -59,6 +59,11 @@ CREATE TABLE expenses (
 )
 ''');
 
+    // Create Indexes
+    await db.execute('CREATE INDEX idx_expenses_date ON expenses (date)');
+    await db.execute('CREATE INDEX idx_expenses_category ON expenses (categoryId)');
+    await db.execute('CREATE INDEX idx_expenses_timestamp ON expenses (timestamp)');
+
     // Insert Default Categories
     await _insertDefaultCategories(db);
   }
@@ -153,7 +158,7 @@ CREATE TABLE expenses (
 
   Future<List<Expense>> readAllExpenses() async {
     final db = await instance.database;
-    final result = await db.query('expenses', orderBy: 'timestamp DESC');
+    final result = await db.query('expenses', orderBy: 'date DESC, timestamp DESC');
     return result.map((json) => Expense.fromMap(json)).toList();
   }
 
