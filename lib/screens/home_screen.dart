@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animations/animations.dart';
+import 'package:intl/intl.dart';
 import '../providers/expense_provider.dart';
 import '../widgets/contribution_grid.dart';
 import '../widgets/empty_state.dart';
@@ -221,7 +222,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      _selectedMonth == null ? 'Total Spent ($_selectedYear)' : 'Total Spent',
+                      _selectedMonth == null 
+                          ? 'Total Spent ($_selectedYear)' 
+                          : 'Total Spent (${DateFormat('MMMM').format(DateTime(_selectedYear, _selectedMonth!))})',
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: colorScheme.onPrimary.withValues(alpha: 0.9),
                         fontWeight: FontWeight.w500,
