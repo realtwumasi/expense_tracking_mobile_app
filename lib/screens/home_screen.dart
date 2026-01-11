@@ -140,17 +140,21 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: OpenContainer(
         openBuilder: (context, _) => const AddEditExpenseScreen(),
-        closedElevation: 6.0,
+        closedElevation: 4.0,
+        openElevation: 0,
         closedShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)), // FAB standard radius
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         closedColor: Theme.of(context).colorScheme.primaryContainer,
         openColor: Theme.of(context).colorScheme.surface,
-        transitionType: ContainerTransitionType.fadeThrough,
-        transitionDuration: const Duration(milliseconds: 500),
+        middleColor: Theme.of(context).colorScheme.primaryContainer,
+        transitionType: ContainerTransitionType.fade,
+        transitionDuration: const Duration(milliseconds: 350),
         closedBuilder: (context, openContainer) {
           return FloatingActionButton(
             elevation: 0,
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+            foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
             onPressed: openContainer,
             child: const Icon(Icons.add),
           );
